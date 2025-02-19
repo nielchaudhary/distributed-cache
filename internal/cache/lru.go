@@ -21,6 +21,7 @@ func NewLRUCache(capacity int) *LRUCache {
 	}
 }
 
+// to get the string from cache, move that element to most recently used in cache if found, else return false
 func (l *LRUCache) Get(key string) (interface{}, bool) {
 	if elem, ok := l.cache[key]; ok {
 		l.list.MoveToFront(elem)
