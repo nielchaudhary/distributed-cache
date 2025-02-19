@@ -30,3 +30,20 @@ func (l *LRUCache) Get(key string) (interface{}, bool) {
 	return nil, false
 
 }
+
+func (l *LRUCache) Put(key string, value interface{}) {
+	if elem, ok := l.cache[key]; ok {
+		//if found, move it to front and update the current value.
+		l.list.MoveToFront(elem)
+		elem.Value.(*entry).value = value
+	}
+
+	if l.list.Len() >= l.capacity {
+		oldest := l.list.Back()
+		delete(l.cache, oldest.Value.(*entry).key)
+		l.list.Remove(oldest)
+	}
+
+	elem := l.list.PushFront(&entry{key, value})
+	l.cache[key] = elem
+}
