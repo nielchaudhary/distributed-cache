@@ -4,8 +4,9 @@ import "container/list"
 
 type LRUCache struct {
 	capacity int
-	cache    map[string]*list.Element //Hash map to store key-value pairs for O(1) lookups.
-	list     *list.List
+	//Hash map to store key-value pairs for O(1) lookups.
+	cache map[string]*list.Element
+	list  *list.List //doubly linked list to maintain the order of items, front = most recently used, end = least recently used
 }
 
 type entry struct {
