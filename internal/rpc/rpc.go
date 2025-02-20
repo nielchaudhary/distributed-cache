@@ -29,6 +29,8 @@ func (c *CacheService) Put(args [2]string, reply *bool) error {
 	return nil
 }
 
+//initialising and running the RPC server
+
 func startServer(cache Cache, address string) error {
 	service := &CacheService{cache: cache}
 	rpc.Register(service)
