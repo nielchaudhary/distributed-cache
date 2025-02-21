@@ -7,7 +7,7 @@ import (
 
 type Cache interface {
 	Get(key string) (interface{}, bool)
-	Put(key string, value string)
+	Put(key string, value interface{})
 }
 
 type CacheService struct {
@@ -31,7 +31,7 @@ func (c *CacheService) Put(args [2]string, reply *bool) error {
 
 //initialising and running the RPC server
 
-func startServer(cache Cache, address string) error {
+func StartServer(cache Cache, address string) error {
 	service := &CacheService{cache: cache}
 	rpc.Register(service)
 
