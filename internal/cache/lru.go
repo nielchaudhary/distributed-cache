@@ -4,14 +4,17 @@ import "container/list"
 
 type LRUCache struct {
 	capacity int
-	//Hash map to store key-value pairs for O(1) lookups.
-	cache map[string]*list.Element
-	list  *list.List //doubly linked list to maintain the order of items, front = most recently used, end = least recently used
+	cache    map[string]*list.Element
+	list     *list.List
 }
 
 type entry struct {
 	key   string
 	value interface{}
+}
+type Cache interface {
+	Get(key string) (interface{}, bool)
+	Put(key string, value interface{})
 }
 
 func NewLRUCache(capacity int) *LRUCache {
@@ -22,21 +25,19 @@ func NewLRUCache(capacity int) *LRUCache {
 	}
 }
 
-// to get the string from cache, move that element to most recently used in cache if found, else return false
 func (l *LRUCache) Get(key string) (interface{}, bool) {
 	if elem, ok := l.cache[key]; ok {
 		l.list.MoveToFront(elem)
 		return elem.Value.(*entry).value, true
 	}
 	return nil, false
-
 }
 
 func (l *LRUCache) Put(key string, value interface{}) {
 	if elem, ok := l.cache[key]; ok {
-		//if found, move it to front and update the current value.
 		l.list.MoveToFront(elem)
 		elem.Value.(*entry).value = value
+		return
 	}
 
 	if l.list.Len() >= l.capacity {
